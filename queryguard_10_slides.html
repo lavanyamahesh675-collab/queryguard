@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QueryGuard 10-Slide Pitch Presentation - iQOO Hackathon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @page { size: 16in 9in; margin: 0; }
+    .slide { width: 100vw; height: 100vh; page-break-after: always; display: flex; flex-direction: column; justify-content: space-between; padding: 3.5rem; box-sizing: border-box; background-color: #080B10; color: #F8FAFC; font-family: ui-sans-serif, system-ui, sans-serif; position: relative; overflow: hidden; }
+  </style>
+</head>
+<body class="bg-[#080B10]">
+
+  <!-- SLIDE 1: COVER -->
+  <div class="slide bg-gradient-to-br from-[#0F172A] via-[#080B10] to-slate-950">
+    <div class="flex justify-between items-center">
+      <span class="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-bold">
+        iQOO National Hackathon MVP — Grand Finale
+      </span>
+      <span class="text-slate-400 font-mono text-xs">Developer Tools Track</span>
+    </div>
+    <div class="space-y-4 max-w-4xl my-auto">
+      <div class="inline-block px-3 py-1 rounded bg-violet-500/10 text-violet-400 border border-violet-500/30 text-xs font-mono font-bold">
+        SLIDE 1 / 10
+      </div>
+      <h1 class="text-6xl font-black tracking-tight text-white leading-tight">
+        QueryGuard <br/>
+        <span class="bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
+          Relational TCP Wire Proxy & N+1 Interceptor
+        </span>
+      </h1>
+      <p class="text-xl text-slate-300 font-light leading-relaxed">
+        Real-time PostgreSQL wire packet sniffer & sliding-window query bottleneck evaluator with zero SDK integration.
+      </p>
+    </div>
+    <div class="pt-6 border-t border-slate-800 flex justify-between items-end">
+      <div>
+        <span class="text-[10px] uppercase font-mono text-slate-500 tracking-wider block">TEAM NEXORA</span>
+        <span class="text-base font-bold text-slate-200">Challa Lavanya (Leader) • Amrutha Varshini Reddy • Navadeep Chennapatnam</span>
+      </div>
+      <div class="text-right font-mono text-xs text-slate-400">
+        <span class="text-emerald-400 font-bold block">PROTOTYPE READY</span>
+        <span>https://queryguard-hackathon.loca.lt</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: THE HIDDEN PROBLEM -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">The Hidden Crisis: ORM N+1 Explosions</h2>
+      <span class="text-rose-400 font-mono text-xs font-bold">SLIDE 2 / 10 • PROBLEM STATEMENT</span>
+    </div>
+    <div class="grid grid-cols-3 gap-6 my-auto">
+      <div class="p-6 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3">
+        <span class="text-emerald-400 font-mono text-xs font-bold block">01. ORM ABSTRACTION</span>
+        <h3 class="text-xl font-bold text-white">Hidden SQL Loops</h3>
+        <p class="text-slate-300 text-xs leading-relaxed">
+          Prisma, TypeORM, Django, and Hibernate abstract SQL behind object graphs, frequently executing child queries inside loops.
+        </p>
+      </div>
+      <div class="p-6 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3">
+        <span class="text-amber-400 font-mono text-xs font-bold block">02. SERIAL RTT EXHAUSTION</span>
+        <h3 class="text-xl font-bold text-white">50+ Queries / Request</h3>
+        <p class="text-slate-300 text-xs leading-relaxed">
+          Retrieving 1 parent record triggers 50 serial roundtrips. Instead of 1 query, database handles 51 separate TCP packets.
+        </p>
+      </div>
+      <div class="p-6 bg-rose-950/20 rounded-2xl border border-rose-500/30 space-y-3">
+        <span class="text-rose-400 font-mono text-xs font-bold block">03. SYSTEM DEADLOCKS</span>
+        <h3 class="text-xl font-bold text-rose-300">Connection Pool Exhaustion</h3>
+        <p class="text-slate-300 text-xs leading-relaxed">
+          Database connection pools freeze, app servers crash, and cloud infrastructure bills explode exponentially.
+        </p>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: ROOT CAUSE -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">Root Cause: Local Dev vs. Cloud Production</h2>
+      <span class="text-amber-400 font-mono text-xs font-bold">SLIDE 3 / 10 • THE LATENCY PARADOX</span>
+    </div>
+    <div class="grid grid-cols-2 gap-8 my-auto">
+      <div class="p-8 bg-slate-900/90 rounded-2xl border border-slate-800 space-y-4">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-mono text-emerald-400 font-bold uppercase">LOCAL DEVELOPMENT</span>
+          <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-xs font-mono">0.2ms Loopback RTT</span>
+        </div>
+        <h3 class="text-2xl font-bold text-white">50 Queries * 0.2ms = <span class="text-emerald-400">10ms (Appears Fast!)</span></h3>
+        <p class="text-slate-300 text-sm leading-relaxed">
+          Developers test code on loopback (`localhost`), where network latency is zero. The severe bottleneck is completely masked during local testing.
+        </p>
+      </div>
+      <div class="p-8 bg-rose-950/30 rounded-2xl border border-rose-500/40 space-y-4 shadow-xl shadow-rose-950/30">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-mono text-rose-400 font-bold uppercase">CLOUD PRODUCTION</span>
+          <span class="px-2.5 py-0.5 rounded bg-rose-500/10 text-rose-400 text-xs font-mono">15ms-30ms Cloud RTT</span>
+        </div>
+        <h3 class="text-2xl font-bold text-white">50 Queries * 15ms = <span class="text-rose-400">750ms - 1500ms (Catastrophic!)</span></h3>
+        <p class="text-slate-300 text-sm leading-relaxed">
+          When deployed to AWS/GCP staging, latency multiplies by 50x. Application threads freeze and database pools deadlock under traffic load.
+        </p>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: THE SOLUTION -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">The Solution: Drop-In TCP Wire Proxy</h2>
+      <span class="text-emerald-400 font-mono text-xs font-bold">SLIDE 4 / 10 • QUERYGUARD ENGINE</span>
+    </div>
+    <div class="grid grid-cols-3 gap-6 my-auto text-xs">
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-3">
+        <span class="text-cyan-400 font-mono font-bold block">ZERO-SDK PROXY</span>
+        <h3 class="text-lg font-bold text-white">Port 5433 -> 5432</h3>
+        <p class="text-slate-300 leading-relaxed">
+          Simply change database port from 5432 to 5433. No application code changes or heavy SDKs required.
+        </p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-3">
+        <span class="text-violet-400 font-mono font-bold block">PROTOCOL SNIFFER</span>
+        <h4 class="text-lg font-bold text-white">PostgreSQL Wire Protocol 3.0</h4>
+        <p class="text-slate-300 leading-relaxed">
+          Inspects binary TCP frames for `'Q'` (`0x51` Simple Query) and `'P'` (`0x70` Parse Extended Query) packets.
+        </p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-3">
+        <span class="text-emerald-400 font-mono font-bold block">PARAMETERIZED FINGERPRINTS</span>
+        <h4 class="text-lg font-bold text-white">SQL Fingerprinting</h4>
+        <p class="text-slate-300 leading-relaxed">
+          Normalizes literals, strings, and UUIDs to canonical fingerprints (`WHERE post_id = 42` -> `WHERE post_id = ?`).
+        </p>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: DEEP DIVE ARCHITECTURE -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">Deep-Dive: 80ms Sliding Window Evaluator</h2>
+      <span class="text-cyan-400 font-mono text-xs font-bold">SLIDE 5 / 10 • ALGORITHMIC CORRECTION</span>
+    </div>
+    <div class="grid grid-cols-2 gap-8 my-auto items-center">
+      <div class="space-y-4">
+        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-1">
+          <span class="text-xs text-cyan-400 font-mono font-bold block">SLIDING TEMPORAL WINDOW</span>
+          <p class="text-xs text-slate-300">Groups incoming queries by connection socket within a rolling 80ms window.</p>
+        </div>
+        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-1">
+          <span class="text-xs text-rose-400 font-mono font-bold block">N+1 EXPLOSION DETECTION</span>
+          <p class="text-xs text-slate-300">If count >= 4 identical fingerprints in < 80ms, flags an N+1 Query Explosion.</p>
+        </div>
+        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-1">
+          <span class="text-xs text-violet-400 font-mono font-bold block">LATENCY WASTED FORMULA</span>
+          <p class="font-mono text-xs text-violet-300">TimeWastedMs = (BurstCount - 1) * NetworkLatency</p>
+        </div>
+      </div>
+      <div class="p-6 bg-slate-900/90 rounded-2xl border border-slate-800 text-xs font-mono space-y-3">
+        <span class="text-slate-400 uppercase text-[10px] block">REAL-TIME WEBSOCKET FRAME (PORT 4000)</span>
+        <pre class="text-emerald-400 overflow-x-auto p-3 bg-slate-950 rounded border border-slate-800">
+{
+  "id": "q_1711928340123_abc",
+  "rawSql": "SELECT * FROM comments WHERE post_id = 12;",
+  "fingerprint": "SELECT * FROM comments WHERE post_id = ?;",
+  "isNPlusOne": true,
+  "burstCount": 14,
+  "timeWastedMs": 49.4,
+  "detectedORM": "Prisma / TypeORM"
+}</pre>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: WIDESCREEN DASHBOARD -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">Widescreen Telemetry Dashboard</h2>
+      <span class="text-violet-400 font-mono text-xs font-bold">SLIDE 6 / 10 • DESKTOP TELEMETRY</span>
+    </div>
+    <div class="grid grid-cols-3 gap-6 my-auto text-xs">
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-emerald-400 font-mono font-bold block">GANTT WATERFALL TIMELINE</span>
+        <h4 class="font-bold text-white text-base">Streaming Gantt Rows</h4>
+        <p class="text-slate-400">Horizontal Gantt duration bars with highlighted crimson N+1 explosion warnings.</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-cyan-400 font-mono font-bold block">POOL HEATMAP</span>
+        <h4 class="font-bold text-white text-base">100-Slot DB Pool Map</h4>
+        <p class="text-slate-400">Live visualization of connection pool states (Active, Idle, Burst Warning, Deadlocked).</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-violet-400 font-mono font-bold block">LIVE SQL SANDBOX</span>
+        <h4 class="font-bold text-white text-base">Interactive Refactor Lab</h4>
+        <p class="text-slate-400">Test SQL statements live and generate automated Prisma & TypeORM eager JOIN fixes.</p>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: MOBILE COMPANION -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">Mobile Diagnostic Companion App</h2>
+      <span class="text-cyan-400 font-mono text-xs font-bold">SLIDE 7 / 10 • MOBILE APP (/mobile)</span>
+    </div>
+    <div class="grid grid-cols-3 gap-6 my-auto text-xs">
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-cyan-400 font-mono font-bold block">TOUCH-OPTIMIZED APP</span>
+        <h4 class="font-bold text-white text-base">Smartphone Diagnostic Shell</h4>
+        <p class="text-slate-400">Dedicated mobile endpoint for on-the-go database incident notifications.</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-emerald-400 font-mono font-bold block">SYSTEM HEALTH SHIELD</span>
+        <h4 class="font-bold text-white text-base">Radial Health Score Gauge</h4>
+        <p class="text-slate-400">Calculates real-time database efficiency score based on active burst ratios.</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-violet-400 font-mono font-bold block">ACCORDION FIX DRAWERS</span>
+        <h4 class="font-bold text-white text-base">One-Tap Refactor Code</h4>
+        <p class="text-slate-400">Touch to expand copyable code snippets for Prisma, TypeORM, and raw SQL batch JOINs.</p>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: AUTOMATED ORM REFACTORING -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">Automated ORM Code Refactoring</h2>
+      <span class="text-emerald-400 font-mono text-xs font-bold">SLIDE 8 / 10 • ACTIONABLE REFACTORS</span>
+    </div>
+    <div class="grid grid-cols-2 gap-8 my-auto text-xs font-mono">
+      <div class="p-6 bg-rose-950/20 rounded-2xl border border-rose-500/30 space-y-3">
+        <span class="text-rose-400 font-bold block">❌ BEFORE: N+1 SERIAL LOOP (14 DB CALLS)</span>
+        <pre class="p-4 bg-slate-950 rounded border border-slate-800 text-rose-300 leading-relaxed">
+const posts = await prisma.post.findMany();
+
+for (const post of posts) {
+  const comments = await prisma.comment.findMany({
+    where: { postId: post.id }
+  });
+}</pre>
+      </div>
+      <div class="p-6 bg-emerald-950/20 rounded-2xl border border-emerald-500/30 space-y-3">
+        <span class="text-emerald-400 font-bold block">✔ AFTER: QUERYGUARD EAGER BATCH (1 DB CALL)</span>
+        <pre class="p-4 bg-slate-950 rounded border border-slate-800 text-emerald-300 leading-relaxed">
+const postsWithComments = await prisma.post.findMany({
+  include: {
+    comments: true
+  }
+});</pre>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: TECHNICAL BENCHMARKS -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">Technical Benchmarks & Offline Reliability</h2>
+      <span class="text-violet-400 font-mono text-xs font-bold">SLIDE 9 / 10 • SYSTEM PERFORMANCE</span>
+    </div>
+    <div class="grid grid-cols-3 gap-6 my-auto text-xs">
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-cyan-400 font-mono font-bold block">ZERO EXTERNAL DEPENDENCIES</span>
+        <h4 class="font-bold text-white text-base">Pure Node.js Core Modules</h4>
+        <p class="text-slate-400">Uses native `net`, `crypto`, and `ws` modules. 0ms proxy overhead.</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-emerald-400 font-mono font-bold block">OFFLINE MOCK ENGINE</span>
+        <h4 class="font-bold text-white text-base">Standalone Demo Ready</h4>
+        <p class="text-slate-400">Automatically returns simulated ready packets if no live DB is running on 5432.</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 space-y-2">
+        <span class="text-violet-400 font-mono font-bold block">STRESS CONCURRENCY LAB</span>
+        <h4 class="font-bold text-white text-base">Simulated High-QPS Testing</h4>
+        <p class="text-slate-400">Simulates load testing and measures QPS throughput directly from browser controls.</p>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: CONCLUSION & TEAM STANDOUT -->
+  <div class="slide bg-gradient-to-br from-[#0F172A] via-[#080B10] to-slate-950">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+      <h2 class="text-3xl font-black text-white">Why TeamNexora & QueryGuard Win</h2>
+      <span class="text-emerald-400 font-mono text-xs font-bold">SLIDE 10 / 10 • CONCLUSION</span>
+    </div>
+    <div class="grid grid-cols-2 gap-8 my-auto">
+      <div class="space-y-4 text-xs">
+        <div class="p-5 bg-slate-900 rounded-xl border border-slate-800 space-y-1">
+          <span class="font-bold text-emerald-400 block text-sm">1. Real Technical Depth</span>
+          <p class="text-slate-300">TCP wire-level protocol packet sniffing rather than simple web wrappers.</p>
+        </div>
+        <div class="p-5 bg-slate-900 rounded-xl border border-slate-800 space-y-1">
+          <span class="font-bold text-cyan-400 block text-sm">2. Dual Widescreen + Mobile UX</span>
+          <p class="text-slate-300">Edge-to-edge desktop telemetry + touch-optimized mobile diagnostic app.</p>
+        </div>
+        <div class="p-5 bg-slate-900 rounded-xl border border-slate-800 space-y-1">
+          <span class="font-bold text-violet-400 block text-sm">3. Zero-Setup Demo Presentation</span>
+          <p class="text-slate-300">One-tap simulation trigger buttons built directly into the UI navigation bar.</p>
+        </div>
+      </div>
+      <div class="p-8 bg-slate-900/90 rounded-2xl border border-slate-800 flex flex-col justify-between">
+        <div>
+          <span class="text-xs uppercase font-mono text-emerald-400 font-bold tracking-wider block">TEAM NEXORA</span>
+          <h3 class="text-2xl font-extrabold text-white mt-1">Ready for Bengaluru Grand Finale</h3>
+          <p class="text-slate-400 text-xs mt-3 leading-relaxed">
+            Challa Lavanya (Leader) • Amrutha Varshini Reddy • Navadeep Chennapatnam
+          </p>
+        </div>
+        <div class="pt-6 border-t border-slate-800 font-mono text-xs text-slate-300 space-y-1">
+          <div><b class="text-white">GitHub:</b> https://github.com/lavanyamahesh675-collab/queryguard</div>
+          <div><b class="text-white">Live Prototype:</b> https://queryguard-hackathon.loca.lt</div>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-3 text-xs font-mono text-slate-500 flex justify-between">
+      <span>QueryGuard Pitch Presentation • Thank You!</span>
+      <span>TeamNexora</span>
+    </div>
+  </div>
+
+</body>
+</html>

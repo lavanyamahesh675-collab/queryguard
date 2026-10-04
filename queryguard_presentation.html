@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QueryGuard Pitch Deck - iQOO National Hackathon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @page { size: 16in 9in; margin: 0; }
+    .slide { width: 100vw; height: 100vh; page-break-after: always; display: flex; flex-direction: column; justify-content: space-between; padding: 3rem; box-sizing: border-box; background-color: #080B10; color: #F8FAFC; font-family: ui-sans-serif, system-ui, sans-serif; }
+  </style>
+</head>
+<body class="bg-[#080B10]">
+
+  <!-- SLIDE 1: COVER -->
+  <div class="slide bg-gradient-to-br from-[#0F172A] via-[#080B10] to-slate-950">
+    <div class="flex justify-between items-center">
+      <span class="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-sm font-bold">
+        iQOO National Hackathon MVP — Grand Finale
+      </span>
+      <span class="text-slate-400 font-mono text-sm">Developer Tools Track</span>
+    </div>
+    <div class="space-y-4 max-w-4xl">
+      <h1 class="text-6xl font-black tracking-tight text-white">
+        QueryGuard <span class="bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent">TCP Wire Proxy</span>
+      </h1>
+      <p class="text-2xl text-slate-300 font-light leading-relaxed">
+        Real-time PostgreSQL wire packet sniffer & ORM N+1 query loop interceptor with zero SDK integration.
+      </p>
+    </div>
+    <div class="pt-8 border-t border-slate-800 flex justify-between items-end">
+      <div>
+        <span class="text-xs uppercase font-mono text-slate-500 tracking-wider block">TEAM NEXORA</span>
+        <span class="text-lg font-bold text-slate-200">Challa Lavanya (Leader) • Amrutha Varshini Reddy • Navadeep Chennapatnam</span>
+      </div>
+      <div class="text-right">
+        <span class="text-xs uppercase font-mono text-emerald-400 tracking-wider block">PROTOTYPE READY</span>
+        <span class="text-sm font-mono text-slate-400">https://queryguard-hackathon.loca.lt</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: THE PROBLEM -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+      <h2 class="text-3xl font-extrabold text-white">The Hidden Crisis: ORM N+1 Explosions</h2>
+      <span class="text-rose-400 font-mono text-sm font-bold">PROBLEM STATEMENT</span>
+    </div>
+    <div class="grid grid-cols-2 gap-8 my-auto">
+      <div class="p-8 bg-slate-900/90 rounded-2xl border border-slate-800 space-y-4">
+        <span class="text-xs font-mono text-slate-400 uppercase">LOCAL DEVELOPMENT (0ms RTT)</span>
+        <h3 class="text-2xl font-bold text-emerald-400">Masked Latency (~15ms total)</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">
+          In local environments, executing 50+ child query loops takes <15ms due to zero loopback latency. Developers assume code is performant.
+        </p>
+      </div>
+      <div class="p-8 bg-rose-950/20 rounded-2xl border border-rose-500/30 space-y-4 shadow-xl shadow-rose-950/30">
+        <span class="text-xs font-mono text-rose-400 uppercase">CLOUD PRODUCTION (15ms RTT)</span>
+        <h3 class="text-2xl font-bold text-rose-400">Catastrophic Delay (1500ms+)</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">
+          In staging/production, 50 serial network roundtrips block the app for over 1.5 seconds, leading to connection pool exhaustion and deadlocks.
+        </p>
+      </div>
+    </div>
+    <div class="text-center text-xs font-mono text-slate-500">QueryGuard Pitch Deck • Slide 2</div>
+  </div>
+
+  <!-- SLIDE 3: ARCHITECTURE -->
+  <div class="slide">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+      <h2 class="text-3xl font-extrabold text-white">QueryGuard Architecture</h2>
+      <span class="text-cyan-400 font-mono text-sm font-bold">TCP PROTOCOL 3.0 INTERCEPTOR</span>
+    </div>
+    <div class="grid grid-cols-4 gap-4 my-auto text-xs">
+      <div class="p-6 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+        <span class="text-cyan-400 font-mono font-bold block">1. TCP INTERCEPTION</span>
+        <h4 class="font-bold text-white text-base">Port 5433 -> 5432</h4>
+        <p class="text-slate-400">Drops in front of PostgreSQL. Zero SDK required.</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+        <span class="text-violet-400 font-mono font-bold block">2. WIRE SNIFFER</span>
+        <h4 class="font-bold text-white text-base">Packets 0x51 & 0x70</h4>
+        <p class="text-slate-400">Parses raw SQL and normalizes parameterized fingerprints.</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+        <span class="text-rose-400 font-mono font-bold block">3. BURST EVALUATOR</span>
+        <h4 class="font-bold text-white text-base">80ms Sliding Window</h4>
+        <p class="text-slate-400">Flags >= 4 matching queries as N+1 query explosions.</p>
+      </div>
+      <div class="p-6 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+        <span class="text-emerald-400 font-mono font-bold block">4. WEBSOCKET HUB</span>
+        <h4 class="font-bold text-white text-base">Port 4000 Stream</h4>
+        <p class="text-slate-400">Streams Gantt waterfall metrics to Desktop & Mobile apps.</p>
+      </div>
+    </div>
+    <div class="text-center text-xs font-mono text-slate-500">QueryGuard Pitch Deck • Slide 3</div>
+  </div>
+
+</body>
+</html>
