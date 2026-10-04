@@ -96,8 +96,8 @@ In your second terminal, start the Next.js App Router:
 ```bash
 npm run dev
 ```
-- Open **Desktop Dashboard**: [http://localhost:3000](http://localhost:3000)
-- Open **Mobile Companion**: [http://localhost:3000/mobile](http://localhost:3000/mobile)
+- Open **Desktop Dashboard**: https://queryguard1.netlify.app
+- Open **Mobile Companion**:(https://queryguard1.netlify.app/mobile)
 
 ### 5. Run Demo Traffic Simulations
 In a third terminal, simulate query traffic to test the interceptor:
